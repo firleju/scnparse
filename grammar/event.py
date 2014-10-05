@@ -1,7 +1,7 @@
 from pyparsing import *
 from decimal import Decimal
 
-from common import DecimalNum, Identifier, Position
+from grammar.common import DecimalNum, Identifier, Position
 
 # common 
 EventTag = CaselessKeyword('event')

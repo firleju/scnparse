@@ -1,5 +1,5 @@
 from pyparsing import *
-from common import Identifier, UIntNum, DecimalNum, Position, FileName
+from grammar.common import Identifier, UIntNum, DecimalNum, Position, FileName
 
 # common
 NodeTag = CaselessKeyword('node')
@@ -7,11 +7,14 @@ Preamble = \
     NodeTag + \
     DecimalNum('max_dist') + \
     DecimalNum('min_dist') + \
-    Identifier('Name')
+    Identifier('name')
 
 # track
 TrackTag = CaselessKeyword('track')
 EndTrackTag = CaselessKeyword('endtrack')
+
+TrackTagSearch = Preamble + \
+    TrackTag
 
 Environment = oneOf('flat mountains canyon tunnel')
 TrackPrefix = \
@@ -28,7 +31,7 @@ TrackSuffix = Each([\
     Optional(CaselessKeyword('event0') + Identifier('event0')), \
     Optional(CaselessKeyword('event1') + Identifier('event1')), \
     Optional(CaselessKeyword('event2') + Identifier('event2')), \
-    Optional(CaselessKeyword('isolated') + Identifier('isolated'))
+    Optional(CaselessKeyword('isolated') + Identifier('isolated')) \
 ])
 
 VisTag = CaselessKeyword("vis").setParseAction(replaceWith(True))("visibile")
@@ -44,41 +47,40 @@ TrackMaterialParams = \
         DecimalNum('width') + \
         DecimalNum('slope'))('ballast')
 
-TrackMaterial = (VisTag + TrackMaterialParams("material")) | UnvisTag
+TrackMaterial = (VisTag + TrackMaterialParams) | UnvisTag
 
 TrackGeometry = \
-    Position('point') + \
-    DecimalNum('roll') + \
-    Position('control') + \
-    Position('control') + \
-    Position('point') + \
-    DecimalNum('roll') + \
-    DecimalNum('radius')
+    Position('point1') + \
+    DecimalNum('roll1') + \
+    Position('control1') + \
+    Position('control2') + \
+    Position('point2') + \
+    DecimalNum('roll2') + \
+    DecimalNum('radius1')
 
 SwitchGeometry = \
     TrackGeometry + \
-    Position('point') + \
-    DecimalNum('roll') + \
-    Position('control') + \
-    Position('control') + \
-    DecimalNum('roll') + \
-    DecimalNum('radius')
+    Position('point3') + \
+    DecimalNum('roll3') + \
+    Position('control3') + \
+    Position('control4') + \
+    DecimalNum('roll4') + \
+    DecimalNum('radius2')
 
-Track = \
-    Preamble + \
+Track = Preamble + \
     TrackTag + \
     CaselessKeyword('normal') + \
     TrackPrefix + \
-    TrackMaterial('material') + \
+    TrackMaterial + \
     TrackGeometry + \
     TrackSuffix + \
     EndTrackTag
 
-Switch = \
-    Preamble + \
+Switch = Preamble + \
     TrackTag + \
     CaselessKeyword('switch') + \
     TrackPrefix + \
     TrackMaterial + \
     SwitchGeometry + \
-    TrackSuffix
+    TrackSuffix +\
+    EndTrackTag

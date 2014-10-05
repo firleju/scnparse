@@ -21,7 +21,7 @@ def test_track():
         endtrack
     """)
 
-    result = node.Track.parseString(src)
+    result = node.Track.parseString(src).asDict()
 
 def test_track_isolated_event():
     src = strip_comments("""
