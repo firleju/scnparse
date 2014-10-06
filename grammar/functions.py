@@ -1,7 +1,7 @@
 from pyparsing import *
 from grammar import node
 import re
-
+import os, sys
 strip_comments_re = re.compile("//.*?$", re.MULTILINE)
 
 def strip_comments(src):
@@ -38,3 +38,37 @@ def parseSwitch(string_to_parse):
     result['point4'] = dict(result['point4'])
 
     return result
+
+def readNode(file, line):
+
+    string_to_parse = ""
+    searched_node = ""
+
+    while(line):
+
+        string_to_parse += line
+
+        if node.TrackTag.searchString(line).asList().count>0:
+            searched_node = 'track'
+
+        elif node.EndTrackTag.searchString(line).asList().count>0 and searched_node=="track":
+            #koniec node track, zwykly czy switch
+            if node.TrackNormalTag.searchString(string_to_parse).asList().count>0:
+                try:
+                    r = node.TrackNormalTag.parseString(string_to_parse)
+                except ParseException as pe:
+                    #print pe.line
+                    #print pe.lineno
+                    pass
+                finally:
+                    return r
+            elif node.TrackSwitchTag.searchString(string_to_parse).asList().count>0:
+                try:
+                    r = node.TrackSwitchTag.parseString(string_to_parse)
+                except ParseException:
+                    pass
+                finally:
+                    return r
+        line = file.readline()
+
+    return None

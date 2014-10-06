@@ -3,8 +3,7 @@ from grammar.common import Identifier, UIntNum, DecimalNum, Position, FileName
 
 # common
 NodeTag = CaselessKeyword('node')
-Preamble = \
-    NodeTag + \
+Preamble = NodeTag + \
     DecimalNum('max_dist') + \
     DecimalNum('min_dist') + \
     Identifier('name')
@@ -13,12 +12,8 @@ Preamble = \
 TrackTag = CaselessKeyword('track')
 EndTrackTag = CaselessKeyword('endtrack')
 
-TrackTagSearch = Preamble + \
-    TrackTag
-
 Environment = oneOf('flat mountains canyon tunnel')
-TrackPrefix = \
-    DecimalNum('length') + \
+TrackPrefix = DecimalNum('length') + \
     DecimalNum('width') + \
     DecimalNum('friction') + \
     DecimalNum('sound_dist') + \
@@ -37,8 +32,7 @@ TrackSuffix = Each([\
 VisTag = CaselessKeyword("vis").setParseAction(replaceWith(True))("visibile")
 UnvisTag = CaselessKeyword("unvis").setParseAction(replaceWith(False))("visibile")
 
-TrackMaterialParams = \
-    Group(
+TrackMaterialParams = Group(
         FileName('tex') + \
         DecimalNum('scale'))('rail') + \
     Group(
@@ -49,8 +43,7 @@ TrackMaterialParams = \
 
 TrackMaterial = (VisTag + TrackMaterialParams) | UnvisTag
 
-TrackGeometry = \
-    Position('point1') + \
+TrackGeometry = Position('point1') + \
     DecimalNum('roll1') + \
     Position('control1') + \
     Position('control2') + \
@@ -58,8 +51,7 @@ TrackGeometry = \
     DecimalNum('roll2') + \
     DecimalNum('radius1')
 
-SwitchGeometry = \
-    TrackGeometry + \
+SwitchGeometry = TrackGeometry + \
     Position('point3') + \
     DecimalNum('roll3') + \
     Position('control3') + \
@@ -67,9 +59,12 @@ SwitchGeometry = \
     DecimalNum('roll4') + \
     DecimalNum('radius2')
 
+TrackNormalTag = CaselessKeyword('normal')
+TrackSwitchTag = CaselessKeyword('switch')
+
 Track = Preamble + \
     TrackTag + \
-    CaselessKeyword('normal') + \
+    TrackNormalTag + \
     TrackPrefix + \
     TrackMaterial + \
     TrackGeometry + \
@@ -78,7 +73,7 @@ Track = Preamble + \
 
 Switch = Preamble + \
     TrackTag + \
-    CaselessKeyword('switch') + \
+    TrackSwitchTag + \
     TrackPrefix + \
     TrackMaterial + \
     SwitchGeometry + \

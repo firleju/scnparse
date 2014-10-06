@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>45de276a-e8e2-47b4-a746-18f3721ae125</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>SceneParser.py</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <Name>SceneParser</Name>
+    <RootNamespace>SceneParser</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+    <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="grammar\common.py" />
+    <Compile Include="grammar\event.py" />
+    <Compile Include="grammar\functions.py" />
+    <Compile Include="grammar\node.py" />
+    <Compile Include="grammar\test\test_event.py" />
+    <Compile Include="grammar\test\test_node.py" />
+    <Compile Include="grammar\test\__init__.py" />
+    <Compile Include="grammar\__init__.py" />
+    <Compile Include="SceneParser.py" />
+    <Compile Include="setup.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="grammar\" />
+    <Folder Include="grammar\test\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" />
+</Project>
