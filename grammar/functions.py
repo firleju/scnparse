@@ -48,27 +48,32 @@ def readNode(file, line):
 
         string_to_parse += line
 
-        if node.TrackTag.searchString(line).asList().count>0:
-            searched_node = 'track'
+        #najpierw trzeba sprawdzic koniec
+        #inaczej pyparsing zwroci ze znajduje keyword track w endtrack
+        #to jest jakis blad
 
-        elif node.EndTrackTag.searchString(line).asList().count>0 and searched_node=="track":
+        if node.EndTrackTag.searchString(line).asList().__len__()>0 and searched_node=="track":
             #koniec node track, zwykly czy switch
-            if node.TrackNormalTag.searchString(string_to_parse).asList().count>0:
+            if node.TrackNormalTag.searchString(string_to_parse).asList().__len__()>0:
                 try:
-                    r = node.TrackNormalTag.parseString(string_to_parse)
+                    r = parseTrack(string_to_parse)
                 except ParseException as pe:
                     #print pe.line
                     #print pe.lineno
                     pass
                 finally:
                     return r
-            elif node.TrackSwitchTag.searchString(string_to_parse).asList().count>0:
+            elif node.TrackSwitchTag.searchString(string_to_parse).asList().__len__()>0:
                 try:
-                    r = node.TrackSwitchTag.parseString(string_to_parse)
+                    r = parseSwitch(string_to_parse)
                 except ParseException:
                     pass
                 finally:
                     return r
+
+        elif node.TrackTag.searchString(line).asList().__len__()>0:
+            searched_node = "track"
+
         line = file.readline()
 
     return None

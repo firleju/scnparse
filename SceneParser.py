@@ -2,8 +2,8 @@ import fileinput
 import string
 from pyparsing import *
 from grammar import node, event, functions
-from grammar import test
-from grammar.test import test_node
+#from grammar import test
+#from grammar.test import test_node
 import re
 
 strip_comments_re = re.compile("//.*?$", re.MULTILINE)
@@ -29,8 +29,9 @@ r_event = False
 while line:
     #szukamy po slowach kluczowych
 
-    if node.NodeTag.searchString(line).asList().count>0:
-        functions.readNode(file, line)
+    if node.NodeTag.searchString(line).asList().__len__()>0:
+        r = functions.readNode(file, line)
+        pass
     elif event.EventTag:
        pass
         
